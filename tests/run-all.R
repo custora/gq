@@ -1,4 +1,3 @@
 library(testthat)
-library(devtools)
-load_all("gq")  # library(gq)
+library(gq)
 test_package("gq")
