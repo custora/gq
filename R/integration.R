@@ -1,9 +1,9 @@
+
 require(statmod)
 
+# base helper functions, not exported
 
-# base functions
-
-closedIntervalWeightedSum <- function(f, lower, upper, quad) {
+finiteIntervalWeightedSum <- function(f, lower, upper, quad) {
 
   lower <- as.numeric(lower)
   upper <- as.numeric(upper)
@@ -31,7 +31,7 @@ closedIntervalWeightedSum <- function(f, lower, upper, quad) {
   result
 }
 
-halfOpenIntervalWeightedSum <- function(f, finite.limit, quad) {
+halfInfiniteIntervalWeightedSum <- function(f, finite.limit, quad) {
 
   if (any(is.na(finite.limit))) {
     warning("NAs found in limits")
@@ -51,18 +51,46 @@ halfOpenIntervalWeightedSum <- function(f, finite.limit, quad) {
   result
 }
 
-openIntervalWeightedSum <- function(f, quad) {
+infiniteIntervalWeightedSum <- function(f, quad) {
   sum(f(quad$nodes) * quad$weights)
 }
 
 
-# wrappers
-
-legendreIntegrate <- function(f, lower, upper, subdivisions=16) {
+#' Computes a Gauss-Legendre quadrature, which has weight function \eqn{w(x) = 1}. 
+#' This is used for integration over finite limits. 
+#'
+#' @param f The function to integrate.
+#' @param lower The lower limit(s) of integration. May be a vector. Should be 
+#'   finite. 
+#' @param upper The upper limit(s) of integration. May be a vector. Should be
+#'   finite. 
+#' @param subdivisions The number of terms to use in the quadrature sum. 
+#' @param divide.weight Should f be divided by the weight function? No effect
+#'   for Legendre quadrature, since the weight function is 1, but provided
+#'   just for consistency with the other integration functions. 
+#' @return A vector of computed sums that approximates an integral over the 
+#'   supplied limits. 
+#' @export
+legendreIntegrate <- function(f, lower, upper, subdivisions=16, divide.weight=TRUE) {
   quad <- statmod::gauss.quad(subdivisions, kind='legendre')
-  closedIntervalWeightedSum(f, lower, upper, quad)
+  finiteIntervalWeightedSum(f, lower, upper, quad)
 }
 
+#' Computes a Gauss-Jacobi quadrature, which has weight function 
+#' \eqn{w(x) = (1-x)^\alpha (1+x)^\beta}. This is used for integration over 
+#' finite limits. 
+#'
+#' @param f The function to integrate.
+#' @param lower The lower limit(s) of integration. May be a vector. Should be
+#'   finite. 
+#' @param upper The upper limit(s) of integration. May be a vector. Should be
+#'   finite. 
+#' @param subdivisions The number of terms to use in the quadrature sum. 
+#' @param alpha The \eqn{alpha} 
+#' @param divide.weight Should f be divided by the weight function? 
+#' @return A vector of computed sums that approximates an integral over the 
+#'   supplied limits. 
+#' @export
 jacobiIntegrate <- function(f, lower, upper, subdivisions=16, alpha=0, beta=0, divide.weight=TRUE) {
   if (alpha <= -1 || beta <= -1)
     stop("alpha and beta parameters for Jacobi must be > -1")
@@ -71,27 +99,68 @@ jacobiIntegrate <- function(f, lower, upper, subdivisions=16, alpha=0, beta=0, d
     integrand <- function(x) f(x) / ((1-x)^alpha * (1+x)^beta)
   else
     integrand <- f
-  closedIntervalWeightedSum(integrand, lower, upper, quad)
+  finiteIntervalWeightedSum(integrand, lower, upper, quad)
 }
 
+#' Computes a Gauss-Chebyshev quadrature of type 1, which has weight function
+#' \eqn{w(x) = 1/\sqrt{1-x^2}}. This is used for integration over finite 
+#' limits.
+#'
+#' @param f The function to integrate.
+#' @param lower The lower limit(s) of integration. May be a vector. Should be
+#'   finite. 
+#' @param upper The upper limit(s) of integration. May be a vector. Should be
+#'   finite. 
+#' @param subdivisions The number of terms to use in the quadrature sum. 
+#' @param divide.weight Should f be divided by the weight function? 
+#' @return A vector of computed sums that approximates an integral over the 
+#'   supplied limits. 
+#' @export
 chebyshev1Integrate <- function(f, lower, upper, subdivisions=16, divide.weight=TRUE) {
   quad <- statmod::gauss.quad(subdivisions, kind='chebyshev1')
   if (divide.weight)
     integrand <- function(x) f(x) * sqrt(1-x^2)
   else
     integrand <- f
-  closedIntervalWeightedSum(integrand, lower, upper, quad)
+  finiteIntervalWeightedSum(integrand, lower, upper, quad)
 }
 
+#' Computes a Gauss-Chebyshev quadrature of type 2, which has weight function
+#' \eqn{w(x) = \sqrt{1-x^2}}. This is used for integration over finite limits. 
+#'
+#' @param f The function to integrate.
+#' @param lower The lower limit(s) of integration. May be a vector. Should be
+#'   finite. 
+#' @param upper The upper limit(s) of integration. May be a vector. Should be
+#'   finite. 
+#' @param subdivisions The number of terms to use in the quadrature sum. 
+#' @param divide.weight Should f be divided by the weight function? 
+#' @return A vector of computed sums that approximates an integral over the 
+#'   supplied limits. 
+#' @export
 chebyshev2Integrate <- function(f, lower, upper, subdivisions=16, divide.weight=TRUE) {
   quad <- statmod::gauss.quad(subdivisions, kind='chebyshev2')
   if (divide.weight)
     integrand <- function(x) f(x) / sqrt(1-x^2)
   else
     integrand <- f
-  closedIntervalWeightedSum(integrand, lower, upper, quad)
+  finiteIntervalWeightedSum(integrand, lower, upper, quad)
 }
 
+#' Computes a Gauss-Laguerre quadrature, which has weight function 
+#' \eqn{w(x) = x^\alpha exp(-x)}. This is used for integration from a finite 
+#' limit to positive or negative infinity, or vice versa.
+#'
+#' @param f The function to integrate.
+#' @param lower The lower limit(s) of integration. May be a vector. Either this
+#'   or \code{upper}, but not both, should be infinite. 
+#' @param upper The upper limit(s) of integration. May be a vector. Either this
+#'   or \code{lower}, but not both should be infinite. 
+#' @param subdivisions The number of terms to use in the quadrature sum. 
+#' @param divide.weight Should f be divided by the weight function? 
+#' @return A vector of computed sums that approximates an integral over the 
+#'   supplied limits. 
+#' @export
 laguerreIntegrate <- function(f, lower, upper, subdivisions=16, alpha=0, divide.weight=TRUE) {
   quad <- statmod::gauss.quad(subdivisions, kind='laguerre', alpha=alpha)
   lower.finite   <- is.finite(lower)
@@ -106,14 +175,24 @@ laguerreIntegrate <- function(f, lower, upper, subdivisions=16, alpha=0, divide.
     integrand <- function(x) g(x) / (x^alpha * exp(-x))
   else
     integrand <- g
-  ifelse(lower < upper, 1, -1) * halfOpenIntervalWeightedSum(integrand, finite.limit, quad)
+  ifelse(lower < upper, 1, -1) * halfInfiniteIntervalWeightedSum(integrand, finite.limit, quad)
 }
 
+#' Computes a Gauss-Hermite quadrature, which has weight function 
+#' \eqn{w(x) = exp(-x^2)}. This is used for integration from negative to
+#' positive infinity. 
+#'
+#' @param f The function to integrate.
+#' @param subdivisions The number of terms to use in the quadrature sum. 
+#' @param divide.weight Should f be divided by the weight function? 
+#' @return A vector of computed sums that approximates an integral over 
+#'   negative to positive infinity. 
+#' @export
 hermiteIntegrate <- function(f, subdivisions=16, divide.weight=TRUE) {
   quad <- statmod::gauss.quad(subdivisions, kind='hermite')
   if (divide.weight)
     integrand <- function(x) f(x) * exp(x^2)
   else
     integrand <- f
-  openIntervalWeightedSum(integrand, quad)
+  infiniteIntervalWeightedSum(integrand, quad)
 }

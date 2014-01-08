@@ -1,19 +1,20 @@
 Package: gq
 Type: Package
-Title: Vectorized integrator using Gaussian quadrature
+Title: Integral approximation with vector limits using Gaussian quadrature
 Version: 1.0
-Date: 2014-01-02
-Author: Andrew Lim
+Date: 2014-01-08
+Author: Andrew Lim, Aaron Goodman
 Maintainer: Andrew Lim <andy@custora.com>
 Description: A set of functions to compute integrals using Gaussian quadrature.
-  Limits can be passed as vectors. The functions just do a straightforward 
-  quadrature approximation, with no numerical optimization to compute the 
-  optimal value within a tolerance. This is more for when you need vectorized
-  limits and you prefer speed over accuracy (we originally wrote these for
-  computing integrals in maximum likelihood). 
-Depends: 
-  statmod
+    Limits can be passed as vectors. The functions just do a straightforward
+    quadrature approximation, with no numerical optimization to compute the
+    optimal value within a tolerance. This is more for when you need vectorized
+    limits and you prefer speed over accuracy (we originally wrote these for
+    computing integrals in maximum likelihood).
+Depends:
+    R (>= 2.15.2),
+    statmod
 Suggests:
-  devtools,
-  testthat
+    devtools,
+    testthat
 License: MIT

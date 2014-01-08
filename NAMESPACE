@@ -1,1 +1,6 @@
-exportPattern("^[[:alpha:]]+")
+export(chebyshev1Integrate)
+export(chebyshev2Integrate)
+export(hermiteIntegrate)
+export(jacobiIntegrate)
+export(laguerreIntegrate)
+export(legendreIntegrate)

@@ -11,4 +11,15 @@ As an example of where you'd want that: we use this to evaluate integrals in lik
 
 ## Usage
 
+```
+> legendreIntegrate(function(x) x^2 + sqrt(x), 1:5, 2:6)
+> legendreIntegrate(function(x) x^2 + sqrt(x), 1:5, 2:6)  # inexact
+> legendreIntegrate(function(x) x^2 + sqrt(x), 1:5, 2:6)  # more exact with more subdivisions
+> laguerreIntegrate()
+```
+
+See `tests/test-gq.R` for several examples. 
+
 ## Tests
+
+Tests are written with [testthat](https://github.com/hadley/testthat). 
