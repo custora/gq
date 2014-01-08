@@ -1,6 +1,8 @@
 
 # gq
 
+![Ryan Gosling, almost as good-looking of a guy as we are](http://www.gq.com/images/the-magazine/2012/07/0111-cover.jpg)
+
 [Gaussian quadrature](http://en.wikipedia.org/wiki/Gaussian_quadrature)-based integration functions in R. Depends on the [statmod](http://cran.r-project.org/web/packages/statmod/index.html) package (in fact statmod's `gauss.quad` function computes the quadrature points and weights). The integration limits can be vectors. 
 
 There is no numerical optimization to find the exact answer or to get the answer right within a certain error tolerance - you simply specify the number of points you want to use in the approximation. So this is not the best approach when you need high accuracy. This is more for when you want fast computation over a large number of different limits. 
