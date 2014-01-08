@@ -9,18 +9,20 @@ As an example of where you'd want that: we use this to evaluate integrals in lik
 
 ## Installation
 
+Clone the repo and run `R CMD INSTALL gq`. 
+
 ## Usage
 
 ```
 > legendreIntegrate(function(x) x^2 + sqrt(x), 1:5, 2:6)
-> jacobiIntegrate(function(x) sqrt((1+x)/(1-x)), -1, 1, alpha=0, beta=0)  # inexact
-> jacobiIntegrate(function(x) sqrt((1+x)/(1-x)), -1, 1, alpha=-0.5, beta=0.5)  # more exact with more subdivisions
+> jacobiIntegrate(function(x) sqrt((1+x)/(1-x)), -1, 1, alpha=0, beta=0)       # inexact
+> jacobiIntegrate(function(x) sqrt((1+x)/(1-x)), -1, 1, alpha=-0.5, beta=0.5)  # more exact with proper weight function
 > laguerreIntegrate(function(x) exp(-x), c(0, Inf), c(Inf, 0))
 > laguerreIntegrate(function(x) exp(x), c(-Inf, 0), c(0, -Inf))
 ```
 
-See the documentation and `tests/test-gq.R` for several examples. 
+See the documentation and `inst/tests/test-gq.R` for several examples. 
 
 ## Tests
 
-Tests are written with [testthat](https://github.com/hadley/testthat). 
+Tests are written with [testthat](https://github.com/hadley/testthat). You can test the package with `test_package`. 
