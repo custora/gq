@@ -1,8 +1,6 @@
 \name{hermiteIntegrate}
 \alias{hermiteIntegrate}
-\title{Computes a Gauss-Hermite quadrature, which has weight function
-\eqn{w(x) = exp(-x^2)}. This is used for integration from negative to
-positive infinity.}
+\title{Computes a Gauss-Hermite quadrature}
 \usage{
 hermiteIntegrate(f, subdivisions = 16, divide.weight = TRUE)
 }
@@ -23,5 +21,11 @@ over negative to positive infinity.
 Computes a Gauss-Hermite quadrature, which has weight
 function \eqn{w(x) = exp(-x^2)}. This is used for
 integration from negative to positive infinity.
+}
+\examples{
+hermiteIntegrate(function(x) exp(-x^2/2))
+}
+\references{
+http://en.wikipedia.org/wiki/Gaussian_quadrature
 }
 

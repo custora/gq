@@ -15,10 +15,11 @@ As an example of where you'd want that: we use this to evaluate integrals in lik
 > legendreIntegrate(function(x) x^2 + sqrt(x), 1:5, 2:6)
 > legendreIntegrate(function(x) x^2 + sqrt(x), 1:5, 2:6)  # inexact
 > legendreIntegrate(function(x) x^2 + sqrt(x), 1:5, 2:6)  # more exact with more subdivisions
-> laguerreIntegrate()
+> laguerreIntegrate(function(x) exp(-x), c(0, Inf), c(Inf, 0))
+> laguerreIntegrate(function(x) exp(x), c(-Inf, 0), c(0, -Inf))
 ```
 
-See `tests/test-gq.R` for several examples. 
+See the documentation and `tests/test-gq.R` for several examples. 
 
 ## Tests
 

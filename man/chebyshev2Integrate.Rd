@@ -1,7 +1,6 @@
 \name{chebyshev2Integrate}
 \alias{chebyshev2Integrate}
-\title{Computes a Gauss-Chebyshev quadrature of type 2, which has weight function
-\eqn{w(x) = \sqrt{1-x^2}}. This is used for integration over finite limits.}
+\title{Computes a Gauss-Chebyshev quadrature of type 2}
 \usage{
 chebyshev2Integrate(f, lower, upper, subdivisions = 16,
   divide.weight = TRUE)
@@ -29,5 +28,8 @@ over the supplied limits.
 Computes a Gauss-Chebyshev quadrature of type 2, which has
 weight function \eqn{w(x) = \sqrt{1-x^2}}. This is used for
 integration over finite limits.
+}
+\references{
+http://en.wikipedia.org/wiki/Gaussian_quadrature
 }
 
