@@ -36,7 +36,8 @@ used for integration over finite limits.
 }
 \examples{
 jacobiIntegrate(function(x) x^3 + 3*x, 1:3, 2:4) # effectively Legendre
-jacobiIntegrate(function(x) x^3 + 3*x, 1:3, 2:4, alpha=1, beta=1)  # bad approximation
+jacobiIntegrate(function(x) sqrt((1+x)/(1-x)), -1, 1, alpha=0, beta=0)       # bad approximation
+jacobiIntegrate(function(x) sqrt((1+x)/(1-x)), -1, 1, alpha=-0.5, beta=0.5)  # better
 # last element of below will be NA, but the rest will work with a warning
 # next example: some NAs and a warning, but the limits that work will produce values
 jacobiIntegrate(function(x) x^3 + 3*x, 1:5, c(2:4, Inf, NA))

@@ -16,4 +16,4 @@ Depends:
     statmod
 Suggests:
     testthat
-License: MIT
+License: MIT + file LICENSE

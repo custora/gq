@@ -13,8 +13,8 @@ As an example of where you'd want that: we use this to evaluate integrals in lik
 
 ```
 > legendreIntegrate(function(x) x^2 + sqrt(x), 1:5, 2:6)
-> legendreIntegrate(function(x) x^2 + sqrt(x), 1:5, 2:6)  # inexact
-> legendreIntegrate(function(x) x^2 + sqrt(x), 1:5, 2:6)  # more exact with more subdivisions
+> jacobiIntegrate(function(x) sqrt((1+x)/(1-x)), -1, 1, alpha=0, beta=0)  # inexact
+> jacobiIntegrate(function(x) sqrt((1+x)/(1-x)), -1, 1, alpha=-0.5, beta=0.5)  # more exact with more subdivisions
 > laguerreIntegrate(function(x) exp(-x), c(0, Inf), c(Inf, 0))
 > laguerreIntegrate(function(x) exp(x), c(-Inf, 0), c(0, -Inf))
 ```

@@ -29,6 +29,9 @@ Computes a Gauss-Chebyshev quadrature of type 1, which has
 weight function \eqn{w(x) = 1/\sqrt{1-x^2}}. This is used
 for integration over finite limits.
 }
+\examples{
+chebyshev1Integrate(function(x) 1/sqrt(1-x^2), -1, 1)
+}
 \references{
 http://en.wikipedia.org/wiki/Gaussian_quadrature
 }

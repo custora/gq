@@ -5,6 +5,9 @@ require(statmod)
 
 finiteIntervalWeightedSum <- function(f, lower, upper, quad) {
 
+  # lower and upper are only used to figure out NAs and output length, 
+  # the adjustment to (-1, 1) should already have been made in f
+
   lower <- as.numeric(lower)
   upper <- as.numeric(upper)
 
@@ -17,21 +20,23 @@ finiteIntervalWeightedSum <- function(f, lower, upper, quad) {
     lower[is.infinite(lower)] <- NA
     upper[is.infinite(upper)] <- NA
   }
-
-  mids <- (upper+lower)/2
-  halfwidths <- (upper-lower)/2
   
   # for loop was actually faster than mapply for typical subdivisions and long 
   # upper and lower limits
 
   result <- rep(0, max(length(lower), length(upper)))
   for (i in 1:length(quad$nodes))
-    result <- result + f(mids + halfwidths * quad$nodes[i]) * quad$weights[i] * halfwidths
+    result <- result + f(quad$nodes[i]) * quad$weights[i]
 
   result
 }
 
 halfInfiniteIntervalWeightedSum <- function(f, finite.limit, quad) {
+
+  # finite.limit are only used to figure out NAs and output length, 
+  # the adjustment to (-1, 1) should already have been made in f
+
+  finite.limit <- as.numeric(finite.limit)
 
   if (any(is.na(finite.limit))) {
     warning("NAs found in limits")
@@ -81,7 +86,10 @@ infiniteIntervalWeightedSum <- function(f, quad) {
 #' legendreIntegrate(function(x) x^3 + 3*x, 1:5, c(2:4, Inf, NA))
 legendreIntegrate <- function(f, lower, upper, subdivisions=16, divide.weight=TRUE) {
   quad <- statmod::gauss.quad(subdivisions, kind='legendre')
-  finiteIntervalWeightedSum(f, lower, upper, quad)
+  mids <- (upper+lower)/2
+  halfwidths <- (upper-lower)/2
+  integrand <- function(x) halfwidths * f(mids + halfwidths * x)
+  finiteIntervalWeightedSum(integrand, lower, upper, quad)
 }
 
 #' Computes a Gauss-Jacobi quadrature
@@ -105,7 +113,8 @@ legendreIntegrate <- function(f, lower, upper, subdivisions=16, divide.weight=TR
 #' @export
 #' @examples
 #' jacobiIntegrate(function(x) x^3 + 3*x, 1:3, 2:4) # effectively Legendre
-#' jacobiIntegrate(function(x) x^3 + 3*x, 1:3, 2:4, alpha=1, beta=1)  # bad approximation
+#' jacobiIntegrate(function(x) sqrt((1+x)/(1-x)), -1, 1, alpha=0, beta=0)       # bad approximation
+#' jacobiIntegrate(function(x) sqrt((1+x)/(1-x)), -1, 1, alpha=-0.5, beta=0.5)  # better
 #' # last element of below will be NA, but the rest will work with a warning
 #' # next example: some NAs and a warning, but the limits that work will produce values
 #' jacobiIntegrate(function(x) x^3 + 3*x, 1:5, c(2:4, Inf, NA))
@@ -113,10 +122,13 @@ jacobiIntegrate <- function(f, lower, upper, subdivisions=16, alpha=0, beta=0, d
   if (alpha <= -1 || beta <= -1)
     stop("alpha and beta parameters for Jacobi must be > -1")
   quad <- statmod::gauss.quad(subdivisions, kind='jacobi', alpha=alpha, beta=beta)
+  mids <- (upper+lower)/2
+  halfwidths <- (upper-lower)/2
+  g <- function(x) halfwidths * f(mids + halfwidths * x)
   if (divide.weight)
-    integrand <- function(x) f(x) / ((1-x)^alpha * (1+x)^beta)
+    integrand <- function(x) g(x) / ((1-x)^alpha * (1+x)^beta)
   else
-    integrand <- f
+    integrand <- g
   finiteIntervalWeightedSum(integrand, lower, upper, quad)
 }
 
@@ -137,12 +149,17 @@ jacobiIntegrate <- function(f, lower, upper, subdivisions=16, alpha=0, beta=0, d
 #'   supplied limits. 
 #' @references http://en.wikipedia.org/wiki/Gaussian_quadrature
 #' @export
+#' @examples
+#' chebyshev1Integrate(function(x) 1/sqrt(1-x^2), -1, 1)
 chebyshev1Integrate <- function(f, lower, upper, subdivisions=16, divide.weight=TRUE) {
   quad <- statmod::gauss.quad(subdivisions, kind='chebyshev1')
+  mids <- (upper+lower)/2
+  halfwidths <- (upper-lower)/2
+  g <- function(x) halfwidths * f(mids + halfwidths * x)
   if (divide.weight)
-    integrand <- function(x) f(x) * sqrt(1-x^2)
+    integrand <- function(x) g(x) * sqrt(1-x^2)
   else
-    integrand <- f
+    integrand <- g
   finiteIntervalWeightedSum(integrand, lower, upper, quad)
 }
 
@@ -162,12 +179,17 @@ chebyshev1Integrate <- function(f, lower, upper, subdivisions=16, divide.weight=
 #'   supplied limits. 
 #' @references http://en.wikipedia.org/wiki/Gaussian_quadrature
 #' @export
+#' @examples
+#' chebyshev2Integrate(function(x) sqrt(1-x^2), -1, 1)
 chebyshev2Integrate <- function(f, lower, upper, subdivisions=16, divide.weight=TRUE) {
   quad <- statmod::gauss.quad(subdivisions, kind='chebyshev2')
+  mids <- (upper+lower)/2
+  halfwidths <- (upper-lower)/2
+  g <- function(x) halfwidths * f(mids + halfwidths * x)
   if (divide.weight)
-    integrand <- function(x) f(x) / sqrt(1-x^2)
+    integrand <- function(x) g(x) / sqrt(1-x^2)
   else
-    integrand <- f
+    integrand <- g
   finiteIntervalWeightedSum(integrand, lower, upper, quad)
 }
 

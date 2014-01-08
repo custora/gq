@@ -33,6 +33,7 @@ test_that("Jacobi works", {
 
   # basic
   expect_that(jacobiIntegrate(function(x) x^2, -1, 1, alpha=0, beta=0), equals(2/3))
+  expect_that(jacobiIntegrate(function(x) sqrt((1+x)/(1-x)), -1, 1, alpha=-0.5, beta=0.5), equals(pi, tolerance=1e-6))
 
   # alpha and beta > -1
   expect_that(jacobiIntegrate(function(x) x, -1, 1, alpha=-2, beta=0), throws_error())
@@ -77,6 +78,5 @@ test_that("warnings on some bad inputs", {
   expect_that(legendreIntegrate(function(x) x, NA, 0:2), gives_warning())
   expect_that(suppressWarnings(legendreIntegrate(function(x) x, c(0,NA), c(1,2))), equals(c(0.5, NA)))
   expect_that(legendreIntegrate(function(x) x, c(0,NA), c(1,2)), gives_warning())
-  expect_that(legendreIntegrate(function(x) x, "a", 0:2), gives_warning())
 
 })
