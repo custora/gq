@@ -12,8 +12,9 @@ Description: A set of functions to compute integrals using Gaussian quadrature.
     limits and you prefer speed over accuracy (we originally wrote these for
     computing integrals in maximum likelihood).
 Depends:
-    R (>= 2.15.2),
-    statmod
+    R (>= 2.15.2)
+Imports:
+    statmod (>= 1.4.20)
 Suggests:
     testthat
 License: MIT + file LICENSE

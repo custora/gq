@@ -1,11 +1,9 @@
 
-require(statmod)
-
 # base helper functions, not exported
 
 finiteIntervalWeightedSum <- function(f, lower, upper, quad) {
 
-  # lower and upper are only used to figure out NAs and output length, 
+  # lower and upper are only used to figure out NAs and output length,
   # the adjustment to (-1, 1) should already have been made in f
 
   lower <- as.numeric(lower)
@@ -20,8 +18,8 @@ finiteIntervalWeightedSum <- function(f, lower, upper, quad) {
     lower[is.infinite(lower)] <- NA
     upper[is.infinite(upper)] <- NA
   }
-  
-  # for loop was actually faster than mapply for typical subdivisions and long 
+
+  # for loop was actually faster than mapply for typical subdivisions and long
   # upper and lower limits
 
   result <- rep(0, max(length(lower), length(upper)))
@@ -33,7 +31,7 @@ finiteIntervalWeightedSum <- function(f, lower, upper, quad) {
 
 halfInfiniteIntervalWeightedSum <- function(f, finite.limit, quad) {
 
-  # finite.limit are only used to figure out NAs and output length, 
+  # finite.limit are only used to figure out NAs and output length,
   # the adjustment to (-1, 1) should already have been made in f
 
   finite.limit <- as.numeric(finite.limit)
@@ -62,20 +60,20 @@ infiniteIntervalWeightedSum <- function(f, quad) {
 
 #' Computes a Gauss-Legendre quadrature
 #'
-#' Computes a Gauss-Legendre quadrature, which has weight function \eqn{w(x) = 1}. 
-#' This is used for integration over finite limits. 
+#' Computes a Gauss-Legendre quadrature, which has weight function \eqn{w(x) = 1}.
+#' This is used for integration over finite limits.
 #'
 #' @param f The function to integrate.
-#' @param lower The lower limit(s) of integration. May be a vector. Should be 
-#'   finite. 
+#' @param lower The lower limit(s) of integration. May be a vector. Should be
+#'   finite.
 #' @param upper The upper limit(s) of integration. May be a vector. Should be
-#'   finite. 
-#' @param subdivisions The number of terms to use in the quadrature sum. 
+#'   finite.
+#' @param subdivisions The number of terms to use in the quadrature sum.
 #' @param divide.weight Should f be divided by the weight function? No effect
 #'   for Legendre quadrature, since the weight function is 1, but provided
-#'   just for consistency with the other integration functions. 
-#' @return A vector of computed sums that approximates an integral over the 
-#'   supplied limits. 
+#'   just for consistency with the other integration functions.
+#' @return A vector of computed sums that approximates an integral over the
+#'   supplied limits.
 #' @references http://en.wikipedia.org/wiki/Gaussian_quadrature
 #' @export
 #' @examples
@@ -94,21 +92,21 @@ legendreIntegrate <- function(f, lower, upper, subdivisions=16, divide.weight=TR
 
 #' Computes a Gauss-Jacobi quadrature
 #'
-#' Computes a Gauss-Jacobi quadrature, which has weight function 
-#' \eqn{w(x) = (1-x)^\alpha (1+x)^\beta}. This is used for integration over 
-#' finite limits. 
+#' Computes a Gauss-Jacobi quadrature, which has weight function
+#' \eqn{w(x) = (1-x)^\alpha (1+x)^\beta}. This is used for integration over
+#' finite limits.
 #'
 #' @param f The function to integrate.
 #' @param lower The lower limit(s) of integration. May be a vector. Should be
-#'   finite. 
+#'   finite.
 #' @param upper The upper limit(s) of integration. May be a vector. Should be
-#'   finite. 
-#' @param subdivisions The number of terms to use in the quadrature sum. 
-#' @param alpha The \eqn{alpha} used in the weight function. 
-#' @param beta The \eqn{beta} used in the weight function. 
-#' @param divide.weight Should f be divided by the weight function? 
-#' @return A vector of computed sums that approximates an integral over the 
-#'   supplied limits. 
+#'   finite.
+#' @param subdivisions The number of terms to use in the quadrature sum.
+#' @param alpha The \eqn{alpha} used in the weight function.
+#' @param beta The \eqn{beta} used in the weight function.
+#' @param divide.weight Should f be divided by the weight function?
+#' @return A vector of computed sums that approximates an integral over the
+#'   supplied limits.
 #' @references http://en.wikipedia.org/wiki/Gaussian_quadrature
 #' @export
 #' @examples
@@ -135,18 +133,18 @@ jacobiIntegrate <- function(f, lower, upper, subdivisions=16, alpha=0, beta=0, d
 #' Computes a Gauss-Chebyshev quadrature of type 1
 #'
 #' Computes a Gauss-Chebyshev quadrature of type 1, which has weight function
-#' \eqn{w(x) = 1/\sqrt{1-x^2}}. This is used for integration over finite 
+#' \eqn{w(x) = 1/\sqrt{1-x^2}}. This is used for integration over finite
 #' limits.
 #'
 #' @param f The function to integrate.
 #' @param lower The lower limit(s) of integration. May be a vector. Should be
-#'   finite. 
+#'   finite.
 #' @param upper The upper limit(s) of integration. May be a vector. Should be
-#'   finite. 
-#' @param subdivisions The number of terms to use in the quadrature sum. 
-#' @param divide.weight Should f be divided by the weight function? 
-#' @return A vector of computed sums that approximates an integral over the 
-#'   supplied limits. 
+#'   finite.
+#' @param subdivisions The number of terms to use in the quadrature sum.
+#' @param divide.weight Should f be divided by the weight function?
+#' @return A vector of computed sums that approximates an integral over the
+#'   supplied limits.
 #' @references http://en.wikipedia.org/wiki/Gaussian_quadrature
 #' @export
 #' @examples
@@ -166,17 +164,17 @@ chebyshev1Integrate <- function(f, lower, upper, subdivisions=16, divide.weight=
 #' Computes a Gauss-Chebyshev quadrature of type 2
 #'
 #' Computes a Gauss-Chebyshev quadrature of type 2, which has weight function
-#' \eqn{w(x) = \sqrt{1-x^2}}. This is used for integration over finite limits. 
+#' \eqn{w(x) = \sqrt{1-x^2}}. This is used for integration over finite limits.
 #'
 #' @param f The function to integrate.
 #' @param lower The lower limit(s) of integration. May be a vector. Should be
-#'   finite. 
+#'   finite.
 #' @param upper The upper limit(s) of integration. May be a vector. Should be
-#'   finite. 
-#' @param subdivisions The number of terms to use in the quadrature sum. 
-#' @param divide.weight Should f be divided by the weight function? 
-#' @return A vector of computed sums that approximates an integral over the 
-#'   supplied limits. 
+#'   finite.
+#' @param subdivisions The number of terms to use in the quadrature sum.
+#' @param divide.weight Should f be divided by the weight function?
+#' @return A vector of computed sums that approximates an integral over the
+#'   supplied limits.
 #' @references http://en.wikipedia.org/wiki/Gaussian_quadrature
 #' @export
 #' @examples
@@ -195,20 +193,20 @@ chebyshev2Integrate <- function(f, lower, upper, subdivisions=16, divide.weight=
 
 #' Computes a Gauss-Laguerre quadrature
 #'
-#' Computes a Gauss-Laguerre quadrature, which has weight function 
-#' \eqn{w(x) = x^\alpha exp(-x)}. This is used for integration from a finite 
+#' Computes a Gauss-Laguerre quadrature, which has weight function
+#' \eqn{w(x) = x^\alpha exp(-x)}. This is used for integration from a finite
 #' limit to positive or negative infinity, or vice versa.
 #'
 #' @param f The function to integrate.
 #' @param lower The lower limit(s) of integration. May be a vector. Either this
-#'   or \code{upper}, but not both, should be infinite. 
+#'   or \code{upper}, but not both, should be infinite.
 #' @param upper The upper limit(s) of integration. May be a vector. Either this
-#'   or \code{lower}, but not both should be infinite. 
-#' @param subdivisions The number of terms to use in the quadrature sum. 
-#' @param alpha The \eqn{alpha} used in the weight function. 
-#' @param divide.weight Should f be divided by the weight function? 
-#' @return A vector of computed sums that approximates an integral over the 
-#'   supplied limits. 
+#'   or \code{lower}, but not both should be infinite.
+#' @param subdivisions The number of terms to use in the quadrature sum.
+#' @param alpha The \eqn{alpha} used in the weight function.
+#' @param divide.weight Should f be divided by the weight function?
+#' @return A vector of computed sums that approximates an integral over the
+#'   supplied limits.
 #' @references http://en.wikipedia.org/wiki/Gaussian_quadrature
 #' @export
 #' @examples
@@ -236,15 +234,15 @@ laguerreIntegrate <- function(f, lower, upper, subdivisions=16, alpha=0, divide.
 
 #' Computes a Gauss-Hermite quadrature
 #'
-#' Computes a Gauss-Hermite quadrature, which has weight function 
+#' Computes a Gauss-Hermite quadrature, which has weight function
 #' \eqn{w(x) = exp(-x^2)}. This is used for integration from negative to
-#' positive infinity. 
+#' positive infinity.
 #'
 #' @param f The function to integrate.
-#' @param subdivisions The number of terms to use in the quadrature sum. 
-#' @param divide.weight Should f be divided by the weight function? 
-#' @return A vector of computed sums that approximates an integral over 
-#'   negative to positive infinity. 
+#' @param subdivisions The number of terms to use in the quadrature sum.
+#' @param divide.weight Should f be divided by the weight function?
+#' @return A vector of computed sums that approximates an integral over
+#'   negative to positive infinity.
 #' @references http://en.wikipedia.org/wiki/Gaussian_quadrature
 #' @export
 #' @examples
